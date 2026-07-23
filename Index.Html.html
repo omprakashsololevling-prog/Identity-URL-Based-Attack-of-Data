@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Attack Detector</title>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #e2e8f0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #0f172a;
+            color: #38bdf8;
+            text-align: center;
+            padding: 1.5rem 0;
+            border-bottom: 2px solid #334155;
+        }
+
+        h1, h2 {
+            color: #f1f5f9;
+            margin: 0.5rem 0;
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .card, .result, .history {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        label {
+            display: block;
+            color: #cbd5e1;
+            margin-top: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        p, span, td, th, b {
+            color: #e2e8f0;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.6rem;
+            background-color: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            color: #f8fafc;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]::placeholder {
+            color: #94a3b8;
+        }
+
+        button {
+            margin-top: 1rem;
+            padding: 0.7rem 1.2rem;
+            background-color: #38bdf8;
+            color: #0f172a;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0ea5e9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th {
+            background-color: #0f172a;
+            color: #38bdf8;
+            padding: 0.6rem;
+            text-align: left;
+        }
+
+        td {
+            padding: 0.6rem;
+            border-top: 1px solid #334155;
+        }
+
+        #status {
+            color: #facc15;
+        }
+    </style>
+
+    <script defer src="script.js"></script>
+</head>
+
+<body>
+
+<header>
+
+<h1>Identity of URL Based Attack for IP Data</h1>
+
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Scan Website</h2>
+
+<label>IP Address</label>
+
+<input type="text"
+id="ip"
+placeholder="Enter IP Address">
+
+<label>Website URL</label>
+
+<input type="text"
+id="url"
+placeholder="https://example.com">
+
+<button onclick="scanURL()">
+Scan URL
+</button>
+
+</div>
+
+<div class="result">
+
+<h2>Detection Result</h2>
+
+<p><b>Status :</b>
+<span id="status">
+Waiting...
+</span>
+</p>
+
+<p><b>Attack Type :</b>
+<span id="attack">
+None
+</span>
+</p>
+
+<p><b>Risk Score :</b>
+<span id="risk">
+0%
+</span>
+</p>
+
+</div>
+
+<div class="history">
+
+<h2>Scan History</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>IP</th>
+
+<th>URL</th>
+
+<th>Status</th>
+
+<th>Attack</th>
+
+<th>Risk</th>
+
+</tr>
+
+</thead>
+
+<tbody id="historyTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</body>
+</html>
