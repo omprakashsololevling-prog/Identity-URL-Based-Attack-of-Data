@@ -1,116 +1,37 @@
-// Load scan history when page opens
-window.onload = function () {
-    loadHistory();
-};
+document.addEventListener('DOMContentLoaded', () => {
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const urlInput = document.getElementById('urlInput');
+    const resultContainer = document.getElementById('resultContainer');
+    const resultText = document.getElementById('resultText');
 
-// Scan URL
-function scanURL() {
+    analyzeBtn.addEventListener('click', () => {
+        const query = urlInput.value.trim();
 
-    let ip = document.getElementById("ip").value.trim();
-    let url = document.getElementById("url").value.trim().toLowerCase();
+        if (!query) {
+            alert('Please enter a URL or data string to analyze.');
+            return;
+        }
 
-    if (ip === "" || url === "") {
-        alert("Please enter both IP Address and URL.");
-        return;
-    }
+        // Basic detection logic (Can be customized according to your research model)
+        const suspiciousPatterns = ['<script>', 'select *', 'union', 'exec', '%20', 'eval('];
+        let detected = false;
 
-    let status = "Safe";
-    let attack = "None";
-    let risk = 5;
+        suspiciousPatterns.forEach(pattern => {
+            if (query.toLowerCase().includes(pattern)) {
+                detected = true;
+            }
+        });
 
-    // SQL Injection
-    if (
-        url.includes("' or '1'='1") ||
-        url.includes("union select") ||
-        url.includes("drop table") ||
-        url.includes("insert into")
-    ) {
-        status = "Malicious";
-        attack = "SQL Injection";
-        risk = 95;
-    }
+        resultContainer.classList.remove('hidden');
 
-    // XSS
-    else if (
-        url.includes("<script>") ||
-        url.includes("javascript:") ||
-        url.includes("onerror=")
-    ) {
-        status = "Malicious";
-        attack = "Cross Site Scripting (XSS)";
-        risk = 90;
-    }
-
-    // Directory Traversal
-    else if (
-        url.includes("../") ||
-        url.includes("..\\")
-    ) {
-        status = "Malicious";
-        attack = "Directory Traversal";
-        risk = 88;
-    }
-
-    // Phishing
-    else if (
-        url.includes("login") ||
-        url.includes("verify") ||
-        url.includes("secure-account") ||
-        url.includes("bank")
-    ) {
-        status = "Suspicious";
-        attack = "Possible Phishing";
-        risk = 70;
-    }
-
-    // Display results
-    document.getElementById("status").innerHTML = status;
-    document.getElementById("attack").innerHTML = attack;
-    document.getElementById("risk").innerHTML = risk + "%";
-
-    // Save scan
-    saveHistory(ip, url, status, attack, risk);
-
-    // Refresh history table
-    loadHistory();
-}
-
-// Save to browser storage
-function saveHistory(ip, url, status, attack, risk) {
-
-    let scans = JSON.parse(localStorage.getItem("scans")) || [];
-
-    scans.push({
-        ip: ip,
-        url: url,
-        status: status,
-        attack: attack,
-        risk: risk,
-        time: new Date().toLocaleString()
+        if (detected) {
+            resultContainer.style.borderColor = '#f85149';
+            resultText.style.color = '#f85149';
+            resultText.innerHTML = `⚠️ <strong>Warning:</strong> Potential URL/Data-based security threat pattern detected!`;
+        } else {
+            resultContainer.style.borderColor = '#3fb950';
+            resultText.style.color = '#3fb950';
+            resultText.innerHTML = `✅ <strong>Clear:</strong> No basic anomaly signatures detected in the provided input.`;
+        }
     });
-
-    localStorage.setItem("scans", JSON.stringify(scans));
-}
-
-// Load history
-function loadHistory() {
-
-    let scans = JSON.parse(localStorage.getItem("scans")) || [];
-
-    let table = document.getElementById("historyTable");
-
-    table.innerHTML = "";
-
-    scans.forEach(scan => {
-
-        table.innerHTML += `
-        <tr>
-            <td>${scan.ip}</td>
-            <td>${scan.url}</td>
-            <td>${scan.status}</td>
-            <td>${scan.attack}</td>
-            <td>${scan.risk}%</td>
-        </tr>
-        `;
-    });
-}
+});
